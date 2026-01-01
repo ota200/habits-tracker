@@ -2,22 +2,40 @@
 // It will be a 3x4 gird layout, where you can extend and shorten gird items as needed, as well as add more gird items.
 // Each grid item will represent a different hobby or interest, one can be a writing tracker, another can be a something else ect.
 import './Gird.css';
+import { useRef, useState } from 'react';
 
 function Grid() {
+    const [girdItems, setGridItems] = useState([]); 
+
+    const counter = useRef(1);
+
+
+    function handleAdd(){
+        const newItem = {id: counter.current, type: 'hobby'};
+        counter.current += 1;
+        setGridItems([newItem, ...girdItems]);
+    }
+
+    function handleDelete(id){
+        setGridItems(girdItems.filter(item => item.id !== id));
+    }
+
     return (  
         <div className="grid-container">
-            <div className="grid-item grid-item--button">First</div>
-            <div className="grid-item">Second</div>
-            <div className="grid-item">Third</div>
-            <div className="grid-item">Fourth</div>
-            <div className="grid-item">Fifth</div>
-            <div className="grid-item">Sixth</div>
-            <div className="grid-item">Seventh</div>
-            <div className="grid-item">Eighth</div>
-            <div className="grid-item">Ninth</div>
-            <div className="grid-item">Tenth</div>
-            <div className="grid-item">Eleventh</div>
-            <div className="grid-item">Twelfth</div>
+
+            {girdItems.map((item,index) => (
+                <div key={item.id} className="grid-item">
+                    {`Hobby ${index+1}`}
+                    <button onClick={() => handleDelete(item.id)}>Delete</button>
+                </div>
+            ))}
+
+            {girdItems.length < 12 && (
+                <div className="grid-item grid-item--button" onClick={handleAdd}>
+                    Add a Hobby
+                </div>
+
+            )}
         </div>
             
     );

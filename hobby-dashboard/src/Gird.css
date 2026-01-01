@@ -28,6 +28,7 @@ html, body, #root {
     justify-content: center;
     align-items: center;
     border-radius: 10px;
+    flex-direction: column;
 }
 
 .grid-item--button {
