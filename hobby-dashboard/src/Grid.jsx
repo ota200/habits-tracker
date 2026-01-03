@@ -95,24 +95,36 @@ function Grid() {
         <div className="grid-container" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {displayItems.map((item, index) => {
                 const isPlaceholder = isDragging && placeholderIndex === index;
+                const isDraggingItem = dragIndexRef.current === gridItems.indexOf(item);
 
                 return (
                     <div
-                        key={isPlaceholder ? 'placeholder' : item.id} // unique key for placeholder
-                        ref={el => (itemRefs.current[item.id] = el)}
-                        className={`grid-item ${
-                            dragIndexRef.current === gridItems.indexOf(item) ? 'dragging' : ''
-                        } ${isPlaceholder ? 'placeholder' : ''}`}
-                        data-index={index}
-                        onMouseDown={e => !isPlaceholder && onMouseDown(gridItems.indexOf(item), e)}
+                    key={isPlaceholder ? 'placeholder' : item.id}
+                    ref={el => (itemRefs.current[item.id] = el)}
+                    className={`grid-item ${isDraggingItem ? 'dragging' : ''} ${isPlaceholder ? 'placeholder' : ''}`}
+                    data-index={index}
                     >
-                        {isPlaceholder ? 'Placeholder' : `Hobby ${gridItems.indexOf(item) + 1}`}
-                        {!isPlaceholder && (
-                            <button onClick={e => { e.stopPropagation(); handleDelete(item.id); }}>Delete</button>
-                        )}
+                    {/* Drag handle only */}
+                    {!isPlaceholder && (
+                        <div
+                        className="drag-handle"
+                        onMouseDown={e => onMouseDown(gridItems.indexOf(item), e)}
+                        >
+                        ⠶⠶⠶
+                        </div>
+                    )}
+
+                    {isPlaceholder ? 'Placeholder' : `Hobby ${gridItems.indexOf(item) + 1}`}
+
+                    {!isPlaceholder && (
+                        <button onClick={e => { e.stopPropagation(); handleDelete(item.id); }}>
+                        Delete
+                        </button>
+                    )}
                     </div>
                 );
-            })}
+                })}
+
 
 
             {gridItems.length < 12 && (
